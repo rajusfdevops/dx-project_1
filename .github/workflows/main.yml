@@ -1,4 +1,4 @@
-name: Deploy to Dev1 and Test1 environments on push to main
+name: Deploy to Salesforce Environments on Push to Main
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - 'force-app/**'
 
 jobs:
-  Deploy-to-Dev1-and-Test1:
+  Deploy-to-Salesforce:
     runs-on: ubuntu-latest
     steps:
       # Step 1: Set up Node.js
@@ -31,12 +31,12 @@ jobs:
           echo Y | sfdx plugins:install sfdx-git-delta
           sfdx plugins
 
-      # Step 5: Create delta packages
+      # Step 5: Create delta packages (detect changes dynamically)
       - name: 'Create delta packages'
         run: |
           mkdir changed-sources
           sf sgd source delta --to "HEAD" --from "HEAD~1" --output changed-sources/ --generate-delta --source force-app/
-          echo "[INFO] Diff generated"
+          echo "[INFO] Delta package created"
 
       # Step 6: Authenticate to Dev1 and retrieve metadata
       - name: 'Authenticate to Dev1 and retrieve metadata'
